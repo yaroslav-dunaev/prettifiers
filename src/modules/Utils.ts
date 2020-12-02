@@ -1,6 +1,7 @@
 import IFrameWidget = SDK.IFrameWidget
 import IWidget = SDK.IWidget
 import {IFrameContent} from 'modules/LayoutService'
+import {CLIENT_ID} from 'config'
 
 export default class Utils {
 	static getFrameWidgets(slide: IFrameWidget): Promise<IFrameContent> {
@@ -18,8 +19,8 @@ export default class Utils {
 
 	static getContentWidgetsFromArray(widgets: IWidget[]): IFrameContent {
 		const frame: any = widgets.find(w => w.type === 'FRAME')
-		const header: any = widgets.find(w => w.type === 'TEXT' && w.metadata['3074457352186372578'].heading == true)
-		const desc: any = widgets.find(w => w.type === 'TEXT' && w.metadata['3074457352186372578'].desc == true)
+		const header: any = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].heading == true)
+		const desc: any = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
 
 		//todo image
 

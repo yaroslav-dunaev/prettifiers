@@ -176,7 +176,7 @@ class Root extends React.Component<IProp, IState> {
 	render() {
 		const editMode = (
 			<div className="edit-mode">
-				<div className="btn play-button" onClick={() => this.layoutsService.createNewFrame()}>
+				<div className="btn play-button" onClick={() => this.layoutsService.createNewSlide()}>
 					<SVG className="icon" src={PlusIcon}/>
 				</div>
 				{/*<div className="btn play-button" onClick={() => this.play()}>*/}

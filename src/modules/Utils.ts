@@ -21,6 +21,7 @@ export default class Utils {
 		const frame: any = widgets.find(w => w.type === 'FRAME')
 		const header: any = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].heading == true)
 		const desc: any = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
+		const image: any = widgets.find(w => w.type === 'IMAGE' || w.type === 'EMOJI' || w.type === 'EMBED')
 
 		//todo image
 
@@ -28,7 +29,7 @@ export default class Utils {
 			slide: frame,
 			header: header,
 			desc: desc,
-			image: undefined
+			image: image,
 		}
 	}
 }

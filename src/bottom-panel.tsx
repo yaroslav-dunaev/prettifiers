@@ -180,16 +180,15 @@ class Root extends React.Component<IProp, IState> {
 				<div className="btn play-button" onClick={() => this.layoutsService.createNewSlide()}>
 					<SVG className="icon" src={PlusIcon}/>
 				</div>
-				<div className="btn play-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.SHOW)}>
+				<div className="btn play-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.INTRO)}>
 				  <SVG className="icon" src={PlayIcon} />
 				</div>
-				<div className="btn hotspot-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.INTRO)}>
+				<div className="btn hotspot-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.SHOW)}>
 					<SVG className="icon" src={SquareIcon}/>
 					<span>Hotspot</span>
 				</div>
-				<div className="btn link-button" onClick={() => this.getLink()}>
+				<div className="btn link-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.TELL)}>
 					<SVG className="icon" src={LinkIcon}/>
-					<span>Autoplay link</span>
 				</div>
 			</div>
 		)

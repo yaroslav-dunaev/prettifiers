@@ -1,9 +1,14 @@
-import {ILayout} from 'modules/LayoutService'
-
 export enum LayoutNames {
 	INTRO = 'intro',
 	SHOW = 'show',
 	TELL = 'tell'
+}
+
+export interface ILayout {
+	name: LayoutNames
+	image: string
+	title: string
+	description: string
 }
 
 export const LAYOUTS: ILayout[] = [

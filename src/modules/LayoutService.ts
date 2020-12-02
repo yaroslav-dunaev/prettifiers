@@ -5,13 +5,6 @@ import Utils from 'modules/Utils'
 import {LayoutNames} from 'modules/Layouts'
 import {CLIENT_ID} from 'config'
 
-export interface ILayout {
-	name: LayoutNames
-	image: string
-	title: string
-	description: string
-}
-
 export interface IFrameContent {
 	slide: IFrameWidget | undefined
 	header?: ITextWidget | undefined
@@ -194,6 +187,7 @@ export default class LayoutService {
 		const slide = data.slide
 		const header = data.header
 		const desc = data.desc
+		const image = data.image
 
 		this.updateFrameLayoutName(slide, LayoutNames.INTRO)
 
@@ -214,6 +208,7 @@ export default class LayoutService {
 		const descData = {
 			id: desc.id,
 			x: slide.x,
+			y: desc!.bounds.height > 60 ? slide.y + slide.height / 2 - 40 - desc.bounds.height / 2 : slide.y + slide.height / 2 - 80 - desc.bounds.height / 2,
 			scale: descScale,
 			width: (slide.width - (SLIDE_PADDING * 2)) / descScale,
 			style: {
@@ -224,22 +219,28 @@ export default class LayoutService {
 		miro.board.widgets.bringForward(header.id)
 		miro.board.widgets.bringForward(desc.id)
 
-		miro.board.widgets.update([headerData, descData]).then((widgets: IWidget[]) => {
-			const desc = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
-			if (!desc) {
-				return
-			}
-			let y: number
-			if (desc!.bounds.height > 60) {
-				y = slide.y + slide.height / 2 - 40 - desc.bounds.height / 2
-			} else {
-				y = slide.y + slide.height / 2 - 80 - desc.bounds.height / 2
-			}
-			miro.board.widgets.update({
-				id: desc.id,
-				y: y
+		const updates: any[] = [headerData, descData]
+
+		if (image) {
+			updates.push({
+				id: image.id,
+				scale: this.calcImageScale(slide.width, slide.height, image),
+				x: slide.x,
+				y: slide.y,
 			})
-		})
+		}
+
+		miro.board.widgets.update(updates)
+	}
+
+	private calcImageScale(width: number, height: number, image: any) { //we don't have emoji in d.ts
+		if (width / image.bounds.width > height / image.bounds.height) {
+			const imageHeight = image.bounds.height / image.scale
+			return height / imageHeight
+		} else {
+			const imageWidth = image.bounds.width / image.scale
+			return width / imageWidth
+		}
 	}
 
 	private applyShowLayout(data: IFrameContent) {
@@ -248,7 +249,16 @@ export default class LayoutService {
 			return
 		}
 		this.updateFrameLayoutName(data.slide, LayoutNames.SHOW)
-		this.applyBaseLayoutText(586, data)
+		const updates = []
+		if (data.image) {
+			updates.push({
+				id: data.image.id,
+				scale: this.calcImageScale(600, 646, data.image),
+				x: data.slide.x + data.slide.width / 2 - 360,
+				y: data.slide.y,
+			})
+		}
+		this.applyBaseLayoutText(586, data.slide.x - data.slide.width / 2 + 353, data, updates)
 	}
 
 	private applyTellLayout(data: IFrameContent) {
@@ -257,10 +267,19 @@ export default class LayoutService {
 			return
 		}
 		this.updateFrameLayoutName(data.slide, LayoutNames.TELL)
-		this.applyBaseLayoutText(1246, data)
+		const updates = []
+		if (data.image) {
+			updates.push({
+				id: data.image.id,
+				scale: this.calcImageScale(100, 100, data.image),
+				x: data.slide.x - data.slide.width / 2 + 110,
+				y: data.slide.y + data.slide.height / 2 - 110,
+			})
+		}
+		this.applyBaseLayoutText(1246, data.slide.x, data, updates)
 	}
 
-	private applyBaseLayoutText(width: number, data: IFrameContent) {
+	private applyBaseLayoutText(width: number, x: number, data: IFrameContent, updates: any[] = []) {
 		if (!data.slide || !data.header || !data.desc) {
 			console.log('don\'t delete header or description')
 			return
@@ -276,51 +295,31 @@ export default class LayoutService {
 
 		const headerData = {
 			id: header.id,
-			x: slide.x - slide.width / 2 + 353,
+			x: x,
+			y: slide.y - slide.height / 2 + 40 + header.bounds.height / 2,
 			scale: headerScale,
 			width: width / headerScale,
 			style: {
 				textAlign: 'l'
 			},
 		}
+		updates.push(headerData)
 
-		const descData = {
+		updates.push({
 			id: desc.id,
-			x: slide.x - slide.width / 2 + 353,
+			x: x,
+			y: header.bounds.height > 100 ? headerData.y + header.bounds.height / 2 + 32 + desc.bounds.height / 2 : slide.y - slide.height / 2 + 196 + desc.bounds.height / 2,
 			scale: descScale,
 			width: width / descScale,
 			style: {
 				textAlign: 'l'
 			}
-		}
+		})
 
 		miro.board.widgets.bringForward(header.id)
 		miro.board.widgets.bringForward(desc.id)
 
-		miro.board.widgets.update([headerData, descData]).then((widgets: IWidget[]) => {
-			const dsc = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
-			const hdr = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].heading == true)
-			if (!dsc || !hdr) {
-				return
-			}
-			let hdrData: any = {
-				id: hdr.id
-			}
-			let dscData: any = {
-				id: dsc.id
-			}
-
-			hdrData.y = slide.y - slide.height / 2 + 40 + hdr.bounds.height / 2
-
-			if (hdr.bounds.height > 100) {
-				//means 2 or more lines
-				dscData.y = hdrData.y + hdr.bounds.height / 2 + 32 + dsc.bounds.height / 2
-			} else {
-				dscData.y = slide.y - slide.height / 2 + 196 + dsc.bounds.height / 2
-			}
-
-			miro.board.widgets.update([hdrData, dscData])
-		})
+		miro.board.widgets.update(updates)
 	}
 
 	private updateFrameLayoutName(frame: IFrameWidget, layoutName: LayoutNames) {

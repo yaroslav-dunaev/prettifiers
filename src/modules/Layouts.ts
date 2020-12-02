@@ -2,8 +2,8 @@ import {ILayout} from 'modules/LayoutService'
 
 export enum LayoutNames {
 	INTRO = 'intro',
-	TEXT = 'text',
-	THIRD_LAYOUT = 'third_layout'
+	SHOW = 'show',
+	TELL = 'tell'
 }
 
 export const LAYOUTS: ILayout[] = [
@@ -14,15 +14,15 @@ export const LAYOUTS: ILayout[] = [
 		description: 'Intro description',
 	},
 	{
-		name: LayoutNames.TEXT,
+		name: LayoutNames.SHOW,
 		image: '',
-		title: 'TEXT',
+		title: 'Show',
 		description: 'TEXT description',
 	},
 	{
-		name: LayoutNames.THIRD_LAYOUT,
+		name: LayoutNames.TELL,
 		image: '',
-		title: 'THIRD_LAYOUT',
+		title: 'Tell',
 		description: 'THIRD_LAYOUT',
 	}
 ]

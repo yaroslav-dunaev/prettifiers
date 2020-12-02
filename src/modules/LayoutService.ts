@@ -22,11 +22,11 @@ export interface IFrameContent {
 const SLIDE_WIDTH = 1366
 const SLIDE_HEIGHT = 768
 const SLIDE_MARGIN = 100
-const SLIDE_PADDING = 48
+const SLIDE_PADDING = 60
 
 const TEXT_MARGIN = 24
 
-const DEFAULT_LAYOUT = LayoutNames.INTRO
+const DEFAULT_LAYOUT = LayoutNames.SHOW
 
 export default class LayoutService {
 	private static _instance: LayoutService
@@ -166,6 +166,10 @@ export default class LayoutService {
 	private processApplyLayout(layoutName: string, data: IFrameContent) {
 		if (layoutName == LayoutNames.INTRO) {
 			this.applyIntroLayout(data)
+		} else if (layoutName === LayoutNames.SHOW) {
+			this.applyShowLayout(data)
+		} else if (layoutName === LayoutNames.TELL) {
+			this.applyTellLayout(data)
 		}
 	}
 
@@ -180,31 +184,123 @@ export default class LayoutService {
 
 		this.updateFrameLayoutName(slide, LayoutNames.INTRO)
 
-		miro.board.widgets.update({
+		const headerScale = 5
+		const descScale = 2.6
+
+		const headerData = {
 			id: header.id,
 			x: slide.x,
-			y: slide.y,
-			width: (slide.width - (SLIDE_PADDING * 2)) / header.scale,
+			y: slide.y - slide.height / 2 + 240 + 52, //47 = half height of single line header
+			scale: headerScale,
+			width: (slide.width - (SLIDE_PADDING * 2)) / headerScale,
 			style: {
 				textAlign: 'c'
 			},
-		}).then((widgets: any[]) => {
-			const updatedHeader: ITextWidget = widgets[0]
-			updatedHeader.bounds.height
+		}
+
+		const descData = {
+			id: desc.id,
+			x: slide.x,
+			scale: descScale,
+			width: (slide.width - (SLIDE_PADDING * 2)) / descScale,
+			style: {
+				textAlign: 'c'
+			}
+		}
+
+		miro.board.widgets.update([headerData, descData]).then((widgets: IWidget[]) => {
+			const desc = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
+			if (!desc) {
+				return
+			}
+			let y: number
+			if (desc!.bounds.height > 60) {
+				y = slide.y + slide.height / 2 - 40 - desc.bounds.height / 2
+			} else {
+				y = slide.y + slide.height / 2 - 80 - desc.bounds.height / 2
+			}
 			miro.board.widgets.update({
 				id: desc.id,
-				x: slide.x,
-				width: (slide.width - (SLIDE_PADDING * 2)) / desc.scale,
-				style: {
-					textAlign: 'c'
-				},
-			}).then((widgets: any[]) => {
-				const upDesc = widgets[0]
-				miro.board.widgets.update({
-					id: desc.id,
-					y: updatedHeader.y + updatedHeader.bounds.height / 2 + TEXT_MARGIN + upDesc.bounds.height / 2,
-				})
+				y: y
 			})
+		})
+	}
+
+	private applyShowLayout(data: IFrameContent) {
+		if (!data.slide || !data.header || !data.desc) {
+			console.log('don\'t delete header or description')
+			return
+		}
+		this.updateFrameLayoutName(data.slide, LayoutNames.SHOW)
+		this.applyBaseLayoutText(586, data)
+	}
+
+	private applyTellLayout(data: IFrameContent) {
+		if (!data.slide || !data.header || !data.desc) {
+			console.log('don\'t delete header or description')
+			return
+		}
+		this.updateFrameLayoutName(data.slide, LayoutNames.TELL)
+		this.applyBaseLayoutText(1246, data)
+	}
+
+	private applyBaseLayoutText(width: number, data: IFrameContent) {
+		if (!data.slide || !data.header || !data.desc) {
+			console.log('don\'t delete header or description')
+			return
+		}
+		const slide = data.slide
+		const header = data.header
+		const desc = data.desc
+
+		this.updateFrameLayoutName(slide, LayoutNames.SHOW)
+
+		const headerScale = 3.5
+		const descScale = 2.6
+
+		const headerData = {
+			id: header.id,
+			x: slide.x - slide.width / 2 + 353,
+			scale: headerScale,
+			width: width / headerScale,
+			style: {
+				textAlign: 'l'
+			},
+		}
+
+		const descData = {
+			id: desc.id,
+			x: slide.x - slide.width / 2 + 353,
+			scale: descScale,
+			width: width / descScale,
+			style: {
+				textAlign: 'l'
+			}
+		}
+
+		miro.board.widgets.update([headerData, descData]).then((widgets: IWidget[]) => {
+			const dsc = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
+			const hdr = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].heading == true)
+			if (!dsc || !hdr) {
+				return
+			}
+			let hdrData: any = {
+				id: hdr.id
+			}
+			let dscData: any = {
+				id: dsc.id
+			}
+
+			hdrData.y = slide.y - slide.height / 2 + 40 + hdr.bounds.height / 2
+
+			if (hdr.bounds.height > 100) {
+				//means 2 or more lines
+				dscData.y = hdrData.y + hdr.bounds.height / 2 + 32 + dsc.bounds.height / 2
+			} else {
+				dscData.y = slide.y - slide.height / 2 + 196 + dsc.bounds.height / 2
+			}
+
+			miro.board.widgets.update([hdrData, dscData])
 		})
 	}
 

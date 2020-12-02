@@ -26,7 +26,7 @@ const SLIDE_PADDING = 60
 
 const TEXT_MARGIN = 24
 
-const DEFAULT_LAYOUT = LayoutNames.SHOW
+const DEFAULT_LAYOUT = LayoutNames.INTRO
 
 export default class LayoutService {
 	private static _instance: LayoutService
@@ -56,10 +56,23 @@ export default class LayoutService {
 		})
 	}
 
-	applyLayout(layoutName: string, frame: IFrameWidget) {
-		Utils.getFrameWidgets(frame).then(content => {
-			this.processApplyLayout(layoutName, content)
-		})
+	applyLayout(layoutName: string, frame?: IFrameWidget) {
+		if (!frame) {
+			miro.board.selection.get().then((widgets: IWidget[]) => {
+				const content = Utils.getContentWidgetsFromArray(widgets)
+				if (content.slide) {
+					Utils.getFrameWidgets(content.slide).then(content => {
+						this.processApplyLayout(layoutName, content)
+					})
+				} else {
+					this.createNewSlide()
+				}
+			})
+		} else {
+			Utils.getFrameWidgets(frame).then(content => {
+				this.processApplyLayout(layoutName, content)
+			})
+		}
 	}
 
 	private init() {
@@ -208,6 +221,9 @@ export default class LayoutService {
 			}
 		}
 
+		miro.board.widgets.bringForward(header.id)
+		miro.board.widgets.bringForward(desc.id)
+
 		miro.board.widgets.update([headerData, descData]).then((widgets: IWidget[]) => {
 			const desc = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
 			if (!desc) {
@@ -278,6 +294,9 @@ export default class LayoutService {
 			}
 		}
 
+		miro.board.widgets.bringForward(header.id)
+		miro.board.widgets.bringForward(desc.id)
+
 		miro.board.widgets.update([headerData, descData]).then((widgets: IWidget[]) => {
 			const dsc = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].desc == true)
 			const hdr = widgets.find(w => w.type === 'TEXT' && w.metadata[CLIENT_ID].heading == true)
@@ -309,6 +328,7 @@ export default class LayoutService {
 		data.layout = layoutName
 		miro.board.widgets.update({
 			id: frame.id,
+			title: frame.title,
 			metadata: {
 				[CLIENT_ID]: data
 			},

@@ -33,14 +33,25 @@ type IState = {
 	screenIndex: number
 }
 
-class Root extends React.Component {
+type IProp = {}
+
+
+class Root extends React.Component<IProp, IState> {
 	private containerRef: any = React.createRef()
 
-	state: IState = {
-		viewMode: 'loading', //edit, play, select-start-screen
-		selectStartScreenMode: false,
-		screens: [],
-		screenIndex: 0
+	private layoutsService: LayoutService
+
+	constructor(props: IProp) {
+		super(props)
+
+		this.layoutsService = LayoutService.getInstance()
+
+		this.state = {
+			viewMode: 'loading', //edit, play, select-start-screen
+			selectStartScreenMode: false,
+			screens: [],
+			screenIndex: 0
+		}
 	}
 
 	// eslint-disable-next-line
@@ -162,14 +173,10 @@ class Root extends React.Component {
 		})
 	}
 
-	private createSlide() {
-		LayoutService.getInstance().createNewSlide()
-	}
-
 	render() {
 		const editMode = (
 			<div className="edit-mode">
-				<div className="btn play-button" onClick={() => this.createSlide()}>
+				<div className="btn play-button" onClick={() => this.layoutsService.createNewFrame()}>
 					<SVG className="icon" src={PlusIcon}/>
 				</div>
 				{/*<div className="btn play-button" onClick={() => this.play()}>*/}

@@ -19,6 +19,7 @@ miro.onReady(async () => {
             svgIcon: icon24,
             onClick: () => {
               miro.board.ui.openBottomPanel('bottom-panel.html', {width: EDIT_WIDTH})
+              miro.board.openLeftSidebar('sidebar.html');
             },
           }
         }

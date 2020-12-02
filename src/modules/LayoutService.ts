@@ -2,9 +2,13 @@ import IFrameWidget = SDK.IFrameWidget
 import ITextWidget = SDK.ITextWidget
 import IWidget = SDK.IWidget
 import Utils from 'modules/Utils'
+import {LayoutNames} from 'modules/Layouts'
 
 export interface ILayout {
-	name: string
+	name: LayoutNames
+	image: string
+	title: string
+	description: string
 }
 
 export interface IFrameContent {

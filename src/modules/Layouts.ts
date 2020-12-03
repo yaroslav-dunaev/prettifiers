@@ -24,7 +24,7 @@ export const LAYOUTS: ILayout[] = [
 		image: '',
 		title: 'Intro',
 		description: 'Intro description',
-		slideImageUrl: 'https://image.freepik.com/free-vector/cute-baby-cat-icon-set-collection_65983-212.jpg',
+		slideImageUrl: 'https://raw.githubusercontent.com/yaroslav-dunaev/prettifiers/master/src/images/layout-bg-show.png',
 	},
 	{
 		name: LayoutNames.SHOW,
@@ -38,6 +38,7 @@ export const LAYOUTS: ILayout[] = [
 		image: '',
 		title: 'Tell',
 		description: 'THIRD_LAYOUT',
-		slideImageUrl: 'https://raw.githubusercontent.com/yaroslav-dunaev/prettifiers/master/src/images/layout-bg-tell.png',
+		slideImageUrl: 'https://raw.githubusercontent.com/yaroslav-dunaev/prettifiers/master/src/images/layout-bg-show.png',
+		//https://raw.githubusercontent.com/yaroslav-dunaev/prettifiers/master/src/images/layout-bg-tell.png
 	}
 ]

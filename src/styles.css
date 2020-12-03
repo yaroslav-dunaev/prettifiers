@@ -100,8 +100,19 @@ body {
   color: #999;
 }
 
+.wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 0 24px;
+}
 
-
+.content,
+.slides {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 
 .sidebar-title {
     line-height: 24px;
@@ -110,7 +121,6 @@ body {
     font-style: normal;
     font-weight: 500;
 }
-
 
 .themes-container {
     display: flex;
@@ -125,6 +135,43 @@ body {
     cursor: pointer;
     box-sizing: border-box;
     border: 2px solid #ffffff;
+}
+
+.layouts-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+.layout-img {
+    border-radius: 5px;
+    margin-bottom: 4px;
+    width: 292px;
+    height: 164px;
+}
+
+.layout-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.layouts-container::-webkit-scrollbar {
+    width: 0;
+}
+
+.footer {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .clickable {

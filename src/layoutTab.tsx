@@ -8,34 +8,34 @@ import SVG from 'react-inlinesvg'
 require('./styles.css')
 
 export const Layout = () => {
-  const slideService = SlideService.getInstance()
-  let currentLayout = slideService.currentLayout
-  let currentTheme = slideService.currentTheme
+	const slideService = SlideService.getInstance()
+	let currentLayout = slideService.currentLayout
+	let currentTheme = slideService.currentTheme
 	const layouts = [
 		{
-      name: LayoutNames.INTRO,
+			name: LayoutNames.INTRO,
 			caption: 'Intro',
 			img: './src/images/layout-intro.png'
 		},
 		{
-      name: LayoutNames.SHOW,
+			name: LayoutNames.SHOW,
 			caption: 'Show',
 			img: './src/images/layout-show.png'
 		},
 		{
-      name: LayoutNames.TELL,
+			name: LayoutNames.TELL,
 			caption: 'Tell',
 			img: './src/images/layout-tell.png'
 		}
-  ]
-  const PlusIcon = require('images/plus.svg')
+	]
+	const PlusIcon = require('images/plus.svg')
 
 	const onLayoutClick = (layout: LayoutNames) => {
-    currentLayout = layout
+		currentLayout = layout
 	}
 
 	const onThemeClick = (theme: ITheme) => {
-    currentTheme = theme.name
+		currentTheme = theme.name
 		Utils.selectedSlides().then((slides) => {
 			if (slides.length) {
 				slides.forEach(s => slideService.applyTheme(theme.name, s))
@@ -43,11 +43,11 @@ export const Layout = () => {
 				//todo mark theme as selected
 			}
 		})
-  }
+	}
 
-  const onNewSlideClick = () => {
+	const onNewSlideClick = () => {
 		slideService.createNewSlide(currentLayout, currentTheme)
-  }
+	}
 
 	return (
 		<div className="slides">
@@ -59,15 +59,18 @@ export const Layout = () => {
 				)}
 			</div>
 
-			{layouts.map((layout) => (
-				<div style={{textAlign: 'center'}} key={layout.name}>
-					<img title={layout.caption} style={{display: 'inline-block'}} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
-					<h4 className="h4" style={{display: 'inline-block', marginTop: '0.0em'}}>{layout.caption}</h4>
-				</div>
-			))}
-      <div style={{textAlign: 'right'}}>
-        <SVG className="icon clickable" style={{display: 'inline-block'}} src={PlusIcon} onClick={onNewSlideClick}/>
-      </div>
+			<div className="layouts-container">
+				{layouts.map((layout) => (
+					<div className="layout" key={layout.name}>
+						<img className="layout-img" title={layout.caption} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
+						<div className="layout-title">{layout.caption}</div>
+					</div>
+				))}
+			</div>
+
+			<div className="footer">
+				<SVG className="icon clickable" style={{display: 'inline-block'}} src={PlusIcon} onClick={onNewSlideClick}/>
+			</div>
 		</div>
 	)
 }

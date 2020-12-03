@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom'
 
 import {Layout} from "./layoutTab"
 
+require('./styles.css')
+
 const Root = () => {
   const [active, setActive] = React.useState(0)
   const themeContent = (<h2>Themes</h2>)

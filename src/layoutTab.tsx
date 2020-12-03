@@ -32,6 +32,13 @@ export const Layout = () => {
 
 	const onLayoutClick = (layout: LayoutNames) => {
 		currentLayout = layout
+		Utils.selectedSlides().then((slides) => {
+			if (slides.length) {
+				slides.forEach(s => slideService.applyLayout(layout, s))
+			} else {
+				//todo mark theme as selected
+			}
+		})
 	}
 
 	const onThemeClick = (theme: ITheme) => {

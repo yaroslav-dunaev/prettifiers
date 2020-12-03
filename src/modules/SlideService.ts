@@ -55,20 +55,22 @@ export default class SlideService {
 		})
 	}
 
-	applyLayout(layoutName: LayoutNames) {
+	applyLayout(layoutName: LayoutNames, frame?: IFrameWidget) {
 		this.lastUsedLayoutName = layoutName
-		miro.board.selection.get().then((widgets: IWidget[]) => {
-			const content = Utils.getContentWidgetsFromArray(widgets)
-			if (content.slide) {
-				Utils.getFrameWidgets(content.slide).then(content => {
-					this.processApplyLayout(layoutName, content)
-				})
-			}
-			//todo save layout for the next slide
-			// else {
-			// 	this.createNewSlide()
-			// }
-		})
+		if (frame) {
+			Utils.getFrameWidgets(frame).then(content => {
+				this.processApplyLayout(layoutName, content)
+			})
+		} else {
+			miro.board.selection.get().then((widgets: IWidget[]) => {
+				const content = Utils.getContentWidgetsFromArray(widgets)
+				if (content.slide) {
+					Utils.getFrameWidgets(content.slide).then(content => {
+						this.processApplyLayout(layoutName, content)
+					})
+				}
+			})
+		}
 	}
 
 	applyTheme(themeName: ThemeNames, frame?: IFrameWidget) {

@@ -1,8 +1,8 @@
-import LayoutService from 'modules/LayoutService'
+import SlideService from 'modules/SlideService'
 import * as React from 'react'
 
 export const Layout = () => {
-    const layoutService = LayoutService.getInstance();
+    const slideService = SlideService.getInstance();
     const layouts = [
         {
             name: "Intro",
@@ -19,7 +19,7 @@ export const Layout = () => {
     ]
     const onLayoutClick = (e) => {
         // For now, just create a slide of the with the chose layout
-        layoutService.createNewSlide(e.target.title.toLowerCase())
+        slideService.createNewSlide(e.target.title.toLowerCase())
     }
 
     return (

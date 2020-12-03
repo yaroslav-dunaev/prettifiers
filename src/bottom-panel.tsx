@@ -16,7 +16,7 @@ import {
 import {createHotspot} from 'bottom-panel-controller'
 import SVG from 'react-inlinesvg'
 import {PLAY_WIDTH} from 'config'
-import LayoutService from 'modules/LayoutService'
+import SlideService from 'modules/SlideService'
 import {LayoutNames} from 'modules/Layouts'
 import {ThemeNames} from 'modules/Themes'
 
@@ -41,12 +41,12 @@ type IProp = {}
 class Root extends React.Component<IProp, IState> {
 	private containerRef: any = React.createRef()
 
-	private layoutsService: LayoutService
+	private slideService: SlideService
 
 	constructor(props: IProp) {
 		super(props)
 
-		this.layoutsService = LayoutService.getInstance()
+		this.slideService = SlideService.getInstance()
 
 		this.state = {
 			viewMode: 'loading', //edit, play, select-start-screen
@@ -178,20 +178,20 @@ class Root extends React.Component<IProp, IState> {
 	render() {
 		const editMode = (
 			<div className="edit-mode">
-				<div className="btn play-button" onClick={() => this.layoutsService.createNewSlide()}>
+				<div className="btn play-button" onClick={() => this.slideService.createNewSlide()}>
 					<SVG className="icon" src={PlusIcon}/>
 				</div>
-				<div className="btn play-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.INTRO)}>
+				<div className="btn play-button" onClick={() => this.slideService.applyLayout(LayoutNames.INTRO)}>
 				  <SVG className="icon" src={PlayIcon} />
 				</div>
-				<div className="btn hotspot-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.SHOW)}>
+				<div className="btn hotspot-button" onClick={() => this.slideService.applyLayout(LayoutNames.SHOW)}>
 					<SVG className="icon" src={SquareIcon}/>
 					<span>Hotspot</span>
 				</div>
-				<div className="btn link-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.TELL)}>
+				<div className="btn link-button" onClick={() => this.slideService.applyLayout(LayoutNames.TELL)}>
 					<SVG className="icon" src={LinkIcon}/>
 				</div>
-				<div className="color-circle" onClick={() => this.layoutsService.applyTheme(ThemeNames.RED)}></div>
+				<div className="color-circle" onClick={() => this.slideService.applyTheme(ThemeNames.RED)}></div>
 			</div>
 		)
 

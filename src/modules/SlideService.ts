@@ -23,8 +23,8 @@ const TEXT_MARGIN = 24
 const DEFAULT_LAYOUT = LayoutNames.INTRO
 const DEFAULT_THEME = ThemeNames.DARK
 
-export default class LayoutService {
-	private static _instance: LayoutService
+export default class SlideService {
+	private static _instance: SlideService
 
 	private slides: IFrameWidget[] = []
 	private slideIterator: number = 1
@@ -32,11 +32,11 @@ export default class LayoutService {
 	private lastUsedLayoutName: LayoutNames = DEFAULT_LAYOUT
 	private lastUsedTheme: ThemeNames = DEFAULT_THEME
 
-	static getInstance(): LayoutService {
-		if (!LayoutService._instance) {
-			LayoutService._instance = new LayoutService()
+	static getInstance(): SlideService {
+		if (!SlideService._instance) {
+			SlideService._instance = new SlideService()
 		}
-		return LayoutService._instance
+		return SlideService._instance
 	}
 
 	constructor() {

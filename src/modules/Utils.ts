@@ -1,6 +1,6 @@
 import IFrameWidget = SDK.IFrameWidget
 import IWidget = SDK.IWidget
-import {IFrameContent} from 'modules/LayoutService'
+import {IFrameContent} from 'modules/SlideService'
 import {CLIENT_ID} from 'config'
 
 export default class Utils {

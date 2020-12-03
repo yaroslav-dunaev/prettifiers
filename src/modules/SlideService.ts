@@ -2,7 +2,7 @@ import IFrameWidget = SDK.IFrameWidget
 import ITextWidget = SDK.ITextWidget
 import IWidget = SDK.IWidget
 import Utils from 'modules/Utils'
-import {LayoutNames} from 'modules/Layouts'
+import {getLayoutData, LayoutNames} from 'modules/Layouts'
 import {CLIENT_ID} from 'config'
 import {getThemeData, ThemeNames} from 'modules/Themes'
 
@@ -46,7 +46,7 @@ export default class SlideService {
 	createNewSlide(layoutName?: string, themeName?: string) {
 		this.init().then(() => {
 			const layout = layoutName || this.lastUsedLayoutName
-			miro.board.widgets.create([this.getNewFrameData(layout), this.getNewHeaderData(), this.getNewDescData()]).then((widgets: IWidget[]) => {
+			miro.board.widgets.create([this.getNewFrameData(layout), this.getNewImageData(layout), this.getNewHeaderData(), this.getNewDescData()]).then((widgets: IWidget[]) => {
 				this.processApplyLayout(layout, Utils.getContentWidgetsFromArray(widgets))
 			})
 		})
@@ -142,6 +142,14 @@ export default class SlideService {
 			height: SLIDE_HEIGHT,
 			x: pos.x,
 			y: pos.y,
+		}
+	}
+
+	private getNewImageData(layoutName: string): any {
+		const layoutData = getLayoutData(layoutName)
+		return {
+			type: 'image',
+			url: layoutData.slideImageUrl,
 		}
 	}
 

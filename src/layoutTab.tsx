@@ -9,9 +9,9 @@ require('./styles.css')
 
 export const Layout = () => {
 	const slideService = SlideService.getInstance()
-	let currentLayout = slideService.currentLayout
-//	let currentTheme = slideService.currentTheme
 	const [currentTheme, setCurrentTheme] = React.useState(slideService.currentTheme)
+	const [currentLayout, setCurrentLayout] = React.useState(slideService.currentLayout)
+
 
 	const layouts = [
 		{
@@ -33,7 +33,7 @@ export const Layout = () => {
 	const PlusIcon = require('images/plus.svg')
 
 	const onLayoutClick = (layout: LayoutNames) => {
-		currentLayout = layout
+		setCurrentLayout(layout)
 		Utils.selectedSlides().then((slides) => {
 			if (slides.length) {
 				slides.forEach(s => slideService.applyLayout(layout, s))
@@ -72,7 +72,7 @@ export const Layout = () => {
 				{layouts.map((layout) => (
 					<div className="layout" key={layout.name}>
 						<div className="layout-title">{layout.caption}</div>
-						<img className="layout-img" title={layout.caption} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
+						<img className={(currentLayout == layout.name) ? "layout-img active-layout" : "layout-img"} title={layout.caption} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
 					</div>
 				))}
 			</div>

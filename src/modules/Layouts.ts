@@ -31,13 +31,13 @@ export const LAYOUTS: ILayout[] = [
 		image: '',
 		title: 'Show',
 		description: 'TEXT description',
-		slideImageUrl: 'https://image.freepik.com/free-vector/cute-baby-cat-icon-set-collection_65983-212.jpg',
+		slideImageUrl: 'https://raw.githubusercontent.com/yaroslav-dunaev/prettifiers/master/src/images/layout-bg-show.png',
 	},
 	{
 		name: LayoutNames.TELL,
 		image: '',
 		title: 'Tell',
 		description: 'THIRD_LAYOUT',
-		slideImageUrl: 'https://image.freepik.com/free-vector/cute-baby-cat-icon-set-collection_65983-212.jpg',
+		slideImageUrl: 'https://raw.githubusercontent.com/yaroslav-dunaev/prettifiers/master/src/images/layout-bg-tell.png',
 	}
 ]

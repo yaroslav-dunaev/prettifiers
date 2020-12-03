@@ -43,11 +43,14 @@ export default class SlideService {
 		this.init()
 	}
 
-	createNewSlide(layoutName?: string, themeName?: string) {
+	createNewSlide(layoutName?: LayoutNames, themeName?: ThemeNames) {
 		this.init().then(() => {
 			const layout = layoutName || this.lastUsedLayoutName
+			const theme = themeName || this.lastUsedTheme
 			miro.board.widgets.create([this.getNewFrameData(layout), this.getNewImageData(layout), this.getNewHeaderData(), this.getNewDescData()]).then((widgets: IWidget[]) => {
-				this.processApplyLayout(layout, Utils.getContentWidgetsFromArray(widgets))
+				const content = Utils.getContentWidgetsFromArray(widgets)
+				this.processApplyLayout(layout, content)
+				this.processApplyTheme(theme, content)
 			})
 		})
 	}
@@ -67,7 +70,8 @@ export default class SlideService {
 		})
 	}
 
-	applyTheme(themeName: string) {
+	applyTheme(themeName: ThemeNames) {
+		this.lastUsedTheme = themeName
 		miro.board.selection.get().then((widgets: IWidget[]) => {
 			const content = Utils.getContentWidgetsFromArray(widgets)
 			if (content.slide) {
@@ -185,7 +189,7 @@ export default class SlideService {
 		}
 	}
 
-	private processApplyTheme(themeName: string, data: IFrameContent) {
+	private processApplyTheme(themeName: ThemeNames, data: IFrameContent) {
 		if (!data.slide || !data.header || !data.desc) {
 			console.log('don\'t delete header or description')
 			return
@@ -193,6 +197,7 @@ export default class SlideService {
 		const themeData = getThemeData(themeName)
 		const frameData = {
 			id: data.slide.id,
+			title: data.slide.title,
 			style: {
 				backgroundColor: themeData.bgColor
 			}

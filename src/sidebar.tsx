@@ -9,20 +9,20 @@ const Root = () => {
 
   return (
     <div className="wrapper">
-      <div className="tabs">
-        <div className="tabs-header-list">
-          <Tab
-            title="Layout"
-            onTabClicked={() => setActive(0)}
-            isActive={active === 0}
-          ></Tab>
-          <Tab
-            title="Theme"
-            onTabClicked={() => setActive(1)}
-            isActive={active === 1}
-          ></Tab>
-        </div>
-      </div>
+      {/*<div className="tabs">*/}
+      {/*  <div className="tabs-header-list">*/}
+      {/*    <Tab*/}
+      {/*      title="Layout"*/}
+      {/*      onTabClicked={() => setActive(0)}*/}
+      {/*      isActive={active === 0}*/}
+      {/*    ></Tab>*/}
+      {/*    <Tab*/}
+      {/*      title="Theme"*/}
+      {/*      onTabClicked={() => setActive(1)}*/}
+      {/*      isActive={active === 1}*/}
+      {/*    ></Tab>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
       <div className="content">{(active === 0) ? <Layout/> : themeContent}</div>
     </div>
   );

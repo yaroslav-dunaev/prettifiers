@@ -33,7 +33,7 @@ export default class Utils {
 		}
 	}
 
-	static selectedSlides() {
+	static selectedSlides(): Promise<any[]> {
 		return new Promise((resolve) => {
 			miro.board.selection.get().then((widgets: IWidget[]) => {
 				resolve(widgets.filter(w => w.type === 'FRAME' && w.metadata[CLIENT_ID].slide == true))

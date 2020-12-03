@@ -70,20 +70,22 @@ export default class SlideService {
 		})
 	}
 
-	applyTheme(themeName: ThemeNames) {
+	applyTheme(themeName: ThemeNames, frame?: IFrameWidget) {
 		this.lastUsedTheme = themeName
-		miro.board.selection.get().then((widgets: IWidget[]) => {
-			const content = Utils.getContentWidgetsFromArray(widgets)
-			if (content.slide) {
-				Utils.getFrameWidgets(content.slide).then(content => {
-					this.processApplyTheme(themeName, content)
-				})
-			}
-			//todo save theme for the next slide
-			// else {
-			// 	this.createNewSlide()
-			// }
-		})
+		if (frame) {
+			Utils.getFrameWidgets(frame).then(content => {
+				this.processApplyTheme(themeName, content)
+			})
+		} else {
+			miro.board.selection.get().then((widgets: IWidget[]) => {
+				const content = Utils.getContentWidgetsFromArray(widgets)
+				if (content.slide) {
+					Utils.getFrameWidgets(content.slide).then(content => {
+						this.processApplyTheme(themeName, content)
+					})
+				}
+			})
+		}
 	}
 
 	private init() {

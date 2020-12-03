@@ -1,6 +1,7 @@
 import SlideService from 'modules/SlideService'
 import * as React from 'react'
 import {ITheme, THEMES} from 'modules/Themes'
+import Utils from 'modules/Utils'
 
 require('./styles.css')
 
@@ -25,8 +26,14 @@ export const Layout = () => {
 		slideService.createNewSlide(e.target.title.toLowerCase())
 	}
 
-	const onThemeClick = (e) => {
-
+	const onThemeClick = (theme: ITheme) => {
+		Utils.selectedSlides().then((slides) => {
+			if (slides.length) {
+				slides.forEach(s => slideService.applyTheme(theme.name, s))
+			} else {
+				//todo mark theme as selected
+			}
+		})
 	}
 
 	return (
@@ -34,7 +41,7 @@ export const Layout = () => {
 			<h2>Layouts</h2>
 			<div className="themes-container">
 				{THEMES.map((theme: ITheme) => (
-						<div className="theme-button" style={{backgroundColor: theme.bgColor}} key={theme.name} onClick={onThemeClick}></div>
+						<div className="theme-button" style={{backgroundColor: theme.bgColor}} key={theme.name} onClick={() => onThemeClick(theme)}></div>
 					)
 				)}
 			</div>

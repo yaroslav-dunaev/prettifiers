@@ -10,7 +10,9 @@ require('./styles.css')
 export const Layout = () => {
 	const slideService = SlideService.getInstance()
 	let currentLayout = slideService.currentLayout
-	let currentTheme = slideService.currentTheme
+//	let currentTheme = slideService.currentTheme
+	const [currentTheme, setCurrentTheme] = React.useState(slideService.currentTheme)
+
 	const layouts = [
 		{
 			name: LayoutNames.INTRO,
@@ -42,7 +44,7 @@ export const Layout = () => {
 	}
 
 	const onThemeClick = (theme: ITheme) => {
-		currentTheme = theme.name
+		setCurrentTheme(theme.name)
 		Utils.selectedSlides().then((slides) => {
 			if (slides.length) {
 				slides.forEach(s => slideService.applyTheme(theme.name, s))
@@ -61,7 +63,7 @@ export const Layout = () => {
 			<h2>Layouts</h2>
 			<div className="themes-container">
 				{THEMES.map((theme: ITheme) => (
-						<div className="theme-button" style={{backgroundColor: theme.bgColor}} key={theme.name} onClick={() => onThemeClick(theme)}></div>
+						<div className={(currentTheme == theme.name) ? "theme-button theme-active" : "theme-button"} style={{backgroundColor: theme.bgColor}} key={theme.name} onClick={() => onThemeClick(theme)}></div>
 					)
 				)}
 			</div>

@@ -55,7 +55,8 @@ export default class SlideService {
 		})
 	}
 
-	applyLayout(layoutName: string) {
+	applyLayout(layoutName: LayoutNames) {
+		this.lastUsedLayoutName = layoutName
 		miro.board.selection.get().then((widgets: IWidget[]) => {
 			const content = Utils.getContentWidgetsFromArray(widgets)
 			if (content.slide) {
@@ -86,6 +87,14 @@ export default class SlideService {
 				}
 			})
 		}
+	}
+
+	get currentTheme() {
+		return this.lastUsedTheme;
+	}
+
+	get currentLayout() {
+		return this.lastUsedLayoutName;
 	}
 
 	private init() {

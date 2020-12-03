@@ -103,12 +103,18 @@ body {
 
 
 
-
+.sidebar-title {
+    line-height: 24px;
+    margin: 20px 0;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+}
 
 
 .themes-container {
     display: flex;
-    padding: 24px 0;
+    padding: 2px 0 30px 0;
 }
 
 .theme-button {
@@ -118,5 +124,5 @@ body {
     margin-right: 8px;
     cursor: pointer;
     box-sizing: border-box;
-    border: 2px solid transparent;
+    border: 2px solid #ffffff;
 }

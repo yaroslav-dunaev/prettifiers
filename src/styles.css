@@ -137,6 +137,10 @@ body {
     border: 2px solid #ffffff;
 }
 
+.theme-active {
+  border-color: #4262ff;
+}
+
 .layouts-container {
     display: flex;
     flex-direction: column;

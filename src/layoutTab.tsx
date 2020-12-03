@@ -58,7 +58,7 @@ export const Layout = () => {
 
 	return (
 		<div className="slides">
-			<h2>Layouts</h2>
+			<h2>Prettifier</h2>
 			<div className="themes-container">
 				{THEMES.map((theme: ITheme) => (
 						<div className="theme-button" style={{backgroundColor: theme.bgColor}} key={theme.name} onClick={() => onThemeClick(theme)}></div>
@@ -69,8 +69,8 @@ export const Layout = () => {
 			<div className="layouts-container">
 				{layouts.map((layout) => (
 					<div className="layout" key={layout.name}>
-						<img className="layout-img" title={layout.caption} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
 						<div className="layout-title">{layout.caption}</div>
+						<img className="layout-img" title={layout.caption} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
 					</div>
 				))}
 			</div>

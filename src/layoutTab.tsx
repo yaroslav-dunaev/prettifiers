@@ -1,32 +1,41 @@
 import SlideService from 'modules/SlideService'
 import * as React from 'react'
 import {ITheme, THEMES} from 'modules/Themes'
+import {LayoutNames} from 'modules/Layouts'
 import Utils from 'modules/Utils'
+import SVG from 'react-inlinesvg'
 
 require('./styles.css')
 
 export const Layout = () => {
-	const slideService = SlideService.getInstance()
+  const slideService = SlideService.getInstance()
+  let currentLayout = slideService.currentLayout
+  let currentTheme = slideService.currentTheme
 	const layouts = [
 		{
-			name: 'Intro',
+      name: LayoutNames.INTRO,
+			caption: 'Intro',
 			img: './src/images/layout-intro.png'
 		},
 		{
-			name: 'Show',
+      name: LayoutNames.SHOW,
+			caption: 'Show',
 			img: './src/images/layout-show.png'
 		},
 		{
-			name: 'Tell',
+      name: LayoutNames.TELL,
+			caption: 'Tell',
 			img: './src/images/layout-tell.png'
 		}
-	]
-	const onLayoutClick = (e) => {
-		// For now, just create a slide of the with the chose layout
-		slideService.createNewSlide(e.target.title.toLowerCase())
+  ]
+  const PlusIcon = require('images/plus.svg')
+
+	const onLayoutClick = (layout: LayoutNames) => {
+    currentLayout = layout
 	}
 
 	const onThemeClick = (theme: ITheme) => {
+    currentTheme = theme.name
 		Utils.selectedSlides().then((slides) => {
 			if (slides.length) {
 				slides.forEach(s => slideService.applyTheme(theme.name, s))
@@ -34,7 +43,11 @@ export const Layout = () => {
 				//todo mark theme as selected
 			}
 		})
-	}
+  }
+
+  const onNewSlideClick = () => {
+		slideService.createNewSlide(currentLayout, currentTheme)
+  }
 
 	return (
 		<div className="slides">
@@ -48,10 +61,13 @@ export const Layout = () => {
 
 			{layouts.map((layout) => (
 				<div style={{textAlign: 'center'}} key={layout.name}>
-					<img title={layout.name} style={{display: 'inline-block'}} src={layout.img} onClick={onLayoutClick}></img>
-					<h4 className="h4" style={{display: 'inline-block', marginTop: '0.0em'}}>{layout.name}</h4>
+					<img title={layout.caption} style={{display: 'inline-block'}} src={layout.img} onClick={() => onLayoutClick(layout.name)}></img>
+					<h4 className="h4" style={{display: 'inline-block', marginTop: '0.0em'}}>{layout.caption}</h4>
 				</div>
 			))}
+      <div style={{textAlign: 'right'}}>
+        <SVG className="icon clickable" style={{display: 'inline-block'}} src={PlusIcon} onClick={onNewSlideClick}/>
+      </div>
 		</div>
 	)
 }

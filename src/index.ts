@@ -18,7 +18,7 @@ miro.onReady(async () => {
             title: 'Prettifiers',
             svgIcon: icon24,
             onClick: () => {
-              miro.board.ui.openBottomPanel('bottom-panel.html', {width: EDIT_WIDTH})
+              // miro.board.ui.openBottomPanel('bottom-panel.html', {width: EDIT_WIDTH})
               miro.board.ui.openLeftSidebar('sidebar.html');
             },
           }
@@ -27,12 +27,12 @@ miro.onReady(async () => {
     },
   })
 
-  const params = await miro.board.__getParamsFromURL()
-  if (params.runPrototyping) {
-    miro.showNotification('Enter prototyping mode...')
-    miro.addListener('ALL_WIDGETS_LOADED', async () => {
-      miro.__setRuntimeState({enterPrototypingMode: true})
-      miro.board.ui.openBottomPanel('bottom-panel.html')
-    })
-  }
+  // const params = await miro.board.__getParamsFromURL()
+  // if (params.runPrototyping) {
+  //   miro.showNotification('Enter prototyping mode...')
+  //   miro.addListener('ALL_WIDGETS_LOADED', async () => {
+  //     miro.__setRuntimeState({enterPrototypingMode: true})
+  //     miro.board.ui.openBottomPanel('bottom-panel.html')
+  //   })
+  // }
 })

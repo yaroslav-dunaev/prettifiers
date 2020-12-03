@@ -7,31 +7,31 @@ const icon24 = `<g id="icon-24" stroke="none" stroke-width="1" fill="none" fill-
       </g>`
 
 miro.onReady(async () => {
-  miro.initialize({
-    extensionPoints: {
-      bottomBar: async () => {
-        const permissions = await miro.currentUser.getCurrentBoardPermissions()
-        const canEdit = permissions.findIndex((p) => p === 'EDIT_CONTENT') !== -1
-        const authorized = await miro.isAuthorized()
-        if (authorized && canEdit) {
-          return {
-            title: 'Prettifiers',
-            svgIcon: icon24,
-            onClick: () => {
-              miro.board.ui.openBottomPanel('bottom-panel.html', {width: EDIT_WIDTH})
-            },
-          }
-        }
-      },
-    },
-  })
+	miro.initialize({
+		extensionPoints: {
+			bottomBar: async () => {
+				const permissions = await miro.currentUser.getCurrentBoardPermissions()
+				const canEdit = permissions.findIndex((p) => p === 'EDIT_CONTENT') !== -1
+				const authorized = await miro.isAuthorized()
+				if (authorized && canEdit) {
+					return {
+						title: 'Prettifiers',
+						svgIcon: icon24,
+						onClick: () => {
+							miro.board.ui.openBottomPanel('bottom-panel.html', {width: EDIT_WIDTH})
+						}
+					}
+				}
+			}
+		}
+	})
 
-  const params = await miro.board.__getParamsFromURL()
-  if (params.runPrototyping) {
-    miro.showNotification('Enter prototyping mode...')
-    miro.addListener('ALL_WIDGETS_LOADED', async () => {
-      miro.__setRuntimeState({enterPrototypingMode: true})
-      miro.board.ui.openBottomPanel('bottom-panel.html')
-    })
-  }
+	const params = await miro.board.__getParamsFromURL()
+	if (params.runPrototyping) {
+		miro.showNotification('Enter prototyping mode...')
+		miro.addListener('ALL_WIDGETS_LOADED', async () => {
+			miro.__setRuntimeState({enterPrototypingMode: true})
+			miro.board.ui.openBottomPanel('bottom-panel.html')
+		})
+	}
 })

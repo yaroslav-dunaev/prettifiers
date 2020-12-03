@@ -4,6 +4,7 @@ import IWidget = SDK.IWidget
 import Utils from 'modules/Utils'
 import {LayoutNames} from 'modules/Layouts'
 import {CLIENT_ID} from 'config'
+import {getThemeData, ThemeNames} from 'modules/Themes'
 
 export interface IFrameContent {
 	slide: IFrameWidget | undefined
@@ -20,6 +21,7 @@ const SLIDE_PADDING = 60
 const TEXT_MARGIN = 24
 
 const DEFAULT_LAYOUT = LayoutNames.INTRO
+const DEFAULT_THEME = ThemeNames.DARK
 
 export default class LayoutService {
 	private static _instance: LayoutService
@@ -28,6 +30,7 @@ export default class LayoutService {
 	private slideIterator: number = 1
 
 	private lastUsedLayoutName: LayoutNames = DEFAULT_LAYOUT
+	private lastUsedTheme: ThemeNames = DEFAULT_THEME
 
 	static getInstance(): LayoutService {
 		if (!LayoutService._instance) {
@@ -40,7 +43,7 @@ export default class LayoutService {
 		this.init()
 	}
 
-	createNewSlide(layoutName?: string) {
+	createNewSlide(layoutName?: string, themeName?: string) {
 		this.init().then(() => {
 			const layout = layoutName || this.lastUsedLayoutName
 			miro.board.widgets.create([this.getNewFrameData(layout), this.getNewHeaderData(), this.getNewDescData()]).then((widgets: IWidget[]) => {
@@ -49,23 +52,34 @@ export default class LayoutService {
 		})
 	}
 
-	applyLayout(layoutName: string, frame?: IFrameWidget) {
-		if (!frame) {
-			miro.board.selection.get().then((widgets: IWidget[]) => {
-				const content = Utils.getContentWidgetsFromArray(widgets)
-				if (content.slide) {
-					Utils.getFrameWidgets(content.slide).then(content => {
-						this.processApplyLayout(layoutName, content)
-					})
-				} else {
-					this.createNewSlide()
-				}
-			})
-		} else {
-			Utils.getFrameWidgets(frame).then(content => {
-				this.processApplyLayout(layoutName, content)
-			})
-		}
+	applyLayout(layoutName: string) {
+		miro.board.selection.get().then((widgets: IWidget[]) => {
+			const content = Utils.getContentWidgetsFromArray(widgets)
+			if (content.slide) {
+				Utils.getFrameWidgets(content.slide).then(content => {
+					this.processApplyLayout(layoutName, content)
+				})
+			}
+			//todo save layout for the next slide
+			// else {
+			// 	this.createNewSlide()
+			// }
+		})
+	}
+
+	applyTheme(themeName: string) {
+		miro.board.selection.get().then((widgets: IWidget[]) => {
+			const content = Utils.getContentWidgetsFromArray(widgets)
+			if (content.slide) {
+				Utils.getFrameWidgets(content.slide).then(content => {
+					this.processApplyTheme(themeName, content)
+				})
+			}
+			//todo save theme for the next slide
+			// else {
+			// 	this.createNewSlide()
+			// }
+		})
 	}
 
 	private init() {
@@ -128,9 +142,6 @@ export default class LayoutService {
 			height: SLIDE_HEIGHT,
 			x: pos.x,
 			y: pos.y,
-			style: {
-				backgroundColor: '#050038'
-			}
 		}
 	}
 
@@ -146,8 +157,6 @@ export default class LayoutService {
 			scale: 4,
 			style: {
 				padding: 0,
-				textColor: '#ffffff',
-				bold: 1,
 			}
 		}
 	}
@@ -164,9 +173,36 @@ export default class LayoutService {
 			scale: 2,
 			style: {
 				padding: 0,
-				textColor: '#ffffff',
 			}
 		}
+	}
+
+	private processApplyTheme(themeName: string, data: IFrameContent) {
+		if (!data.slide || !data.header || !data.desc) {
+			console.log('don\'t delete header or description')
+			return
+		}
+		const themeData = getThemeData(themeName)
+		const frameData = {
+			id: data.slide.id,
+			style: {
+				backgroundColor: themeData.bgColor
+			}
+		}
+		const handlerData = {
+			id: data.header.id,
+			style: {
+				textColor: themeData.textColor
+			}
+		}
+		const descData = {
+			id: data.desc.id,
+			style: {
+				textColor: themeData.textColor
+			}
+		}
+
+		miro.board.widgets.update([frameData, handlerData, descData])
 	}
 
 	private processApplyLayout(layoutName: string, data: IFrameContent) {

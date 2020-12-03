@@ -32,4 +32,12 @@ export default class Utils {
 			image: image,
 		}
 	}
+
+	static selectedSlides() {
+		return new Promise((resolve) => {
+			miro.board.selection.get().then((widgets: IWidget[]) => {
+				resolve(widgets.filter(w => w.type === 'FRAME' && w.metadata[CLIENT_ID].slide == true))
+			})
+		})
+	}
 }

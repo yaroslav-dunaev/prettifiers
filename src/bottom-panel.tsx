@@ -18,6 +18,7 @@ import SVG from 'react-inlinesvg'
 import {PLAY_WIDTH} from 'config'
 import LayoutService from 'modules/LayoutService'
 import {LayoutNames} from 'modules/Layouts'
+import {ThemeNames} from 'modules/Themes'
 
 require('./styles.css')
 const PlusIcon = require('images/plus.svg')
@@ -190,6 +191,7 @@ class Root extends React.Component<IProp, IState> {
 				<div className="btn link-button" onClick={() => this.layoutsService.applyLayout(LayoutNames.TELL)}>
 					<SVG className="icon" src={LinkIcon}/>
 				</div>
+				<div className="color-circle" onClick={() => this.layoutsService.applyTheme(ThemeNames.RED)}></div>
 			</div>
 		)
 

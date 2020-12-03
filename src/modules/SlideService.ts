@@ -21,7 +21,7 @@ const SLIDE_PADDING = 60
 const TEXT_MARGIN = 24
 
 const DEFAULT_LAYOUT = LayoutNames.INTRO
-const DEFAULT_THEME = ThemeNames.DARK
+const DEFAULT_THEME = ThemeNames.WHITE
 
 export default class SlideService {
 	private static _instance: SlideService
@@ -47,7 +47,7 @@ export default class SlideService {
 		this.init().then(() => {
 			const layout = layoutName || this.lastUsedLayoutName
 			const theme = themeName || this.lastUsedTheme
-			miro.board.widgets.create([this.getNewFrameData(layout), this.getNewImageData(layout), this.getNewHeaderData(), this.getNewDescData()]).then((widgets: IWidget[]) => {
+			miro.board.widgets.create([this.getNewFrameData(layout), this.getNewImageData(layout), this.getNewHeaderData(layout), this.getNewDescData(layout)]).then((widgets: IWidget[]) => {
 				const content = Utils.getContentWidgetsFromArray(widgets)
 				this.processApplyLayout(layout, content)
 				this.processApplyTheme(theme, content)
@@ -168,10 +168,11 @@ export default class SlideService {
 		}
 	}
 
-	private getNewHeaderData(): any {
+	private getNewHeaderData(layoutName: string): any {
+		const layoutData = getLayoutData(layoutName)
 		return {
 			type: 'text',
-			text: 'Heading',
+			text: layoutData.headerText,
 			metadata: {
 				[CLIENT_ID]: {
 					heading: true
@@ -184,10 +185,11 @@ export default class SlideService {
 		}
 	}
 
-	private getNewDescData(): any {
+	private getNewDescData(layoutName: string): any {
+		const layoutData = getLayoutData(layoutName)
 		return {
 			type: 'text',
-			text: 'Description',
+			text: layoutData.descText,
 			metadata: {
 				[CLIENT_ID]: {
 					desc: true
